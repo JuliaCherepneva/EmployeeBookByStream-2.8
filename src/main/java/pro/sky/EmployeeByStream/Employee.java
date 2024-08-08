@@ -39,10 +39,10 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return Objects.equals(firstName, employee.firstName)
-                && Objects.equals(lastName, employee.lastName)
-                && Objects.equals(salary, employee.salary)
-                && Objects.equals(departmentId, employee.departmentId);
+        return salary == employee.salary
+                && departmentId == employee.departmentId
+                && Objects.equals(firstName, employee.firstName)
+                && Objects.equals(lastName, employee.lastName);
     }
 
     @Override
@@ -59,4 +59,5 @@ public class Employee {
                 ", departmentId=" + departmentId +
                 '}';
     }
+
 }
