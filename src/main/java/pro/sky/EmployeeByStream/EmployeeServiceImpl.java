@@ -1,11 +1,12 @@
 package pro.sky.EmployeeByStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -28,6 +29,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee addEmployee(String firstName, String lastName, int salary, int departmentId) {
+        if (!validateInput(firstName,lastName)){
+            throw new InvalidInputException();
+        }
+
         Employee employee = new Employee(firstName, lastName,salary,departmentId);
         if (employees.size() >= MAX_EMPLOYEES) {
             throw new EmployeeStorageIsFullException();
@@ -40,6 +45,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public String removeEmployee(String firstName, String lastName) {
+        if (!validateInput(firstName,lastName)){
+            throw new InvalidInputException();
+        }
+
         boolean removed = employees.removeIf(p->p.getFirstName().equals(firstName) && p.getLastName().equals(lastName));
         if (removed){
             return "Сотрудник " + firstName + " " + lastName + " удален.";
@@ -49,6 +58,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee findEmployee(String firstName, String lastName) {
+        if (!validateInput(firstName,lastName)){
+            throw new InvalidInputException();
+        }
+
         return employees.stream()
                 .filter(e -> e.getFirstName().equals(firstName) && e.getLastName().equals(lastName))
                 .findFirst()
@@ -59,5 +72,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List <Employee> allEmployees() {
         return  employees;
     }
+
+    public boolean validateInput(String firstName, String lastName) {
+        return isAlpha(firstName) && isAlpha(lastName);
+}
+
 }
 
